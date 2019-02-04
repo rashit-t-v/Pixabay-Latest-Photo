@@ -224,7 +224,7 @@ public class NewImages extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getPostHandler.removeCallbacks(runnable);
+//        getPostHandler.removeCallbacks(runnable);
         view = null;
     }
 
