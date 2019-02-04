@@ -54,6 +54,7 @@ public class MyViewModel extends AndroidViewModel {
             if (dataBasesNote != null && dataBasesNote.length > 0) {
                 database.notesDao().deletetNote(dataBasesNote[0]);
             }
+
             return null;
         }
     }
