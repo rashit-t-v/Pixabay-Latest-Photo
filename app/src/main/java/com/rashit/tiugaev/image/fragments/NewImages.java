@@ -118,6 +118,7 @@ public class NewImages extends Fragment {
             getData();
             snackbar = Snackbar
                     .make(view, "Есть интернет соединение", Snackbar.LENGTH_LONG);
+            snackbar.show();
         } else {
             snackbar = Snackbar
                     .make(view, "Нет интернет соединения", Snackbar.LENGTH_INDEFINITE);
