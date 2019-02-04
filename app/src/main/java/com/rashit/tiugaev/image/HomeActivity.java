@@ -24,8 +24,6 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private ImageView blurimage;
-    private ImageView poster;
     private TabLayout tableLayout;
     private ViewPager viewPager;
     private ConstraintSet.Constraint constraint;
