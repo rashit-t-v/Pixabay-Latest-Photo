@@ -3,8 +3,6 @@ package com.rashit.tiugaev.image.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -36,11 +34,14 @@ import com.rashit.tiugaev.image.activity.Detail;
 import com.rashit.tiugaev.image.adapters.RecyclerViewAdapter;
 import com.rashit.tiugaev.image.dataBase.DataBase;
 import com.rashit.tiugaev.image.dataBase.NotesDatabase;
+import com.rashit.tiugaev.image.network.CheskInternet;
+import com.rashit.tiugaev.image.network.GetDataInternet;
 import com.rashit.tiugaev.image.network.RetrofitApi;
 import com.rashit.tiugaev.image.viewmodel.MyViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +60,7 @@ public class NewImages extends Fragment {
     private View snakView;
     private NotesDatabase notesDatabase;
     private MyViewModel myViewModel;
+    private Context context;
 
     public NewImages() {
         // Required empty public constructor
@@ -114,8 +116,9 @@ public class NewImages extends Fragment {
         totalCount = 0;
         getPostHandler = new Handler();
         getPostHandler.postDelayed(runnable, 5000);
-        if (isOnline()) {
-            getData();
+
+        if (CheskInternet.chekInternet(Objects.requireNonNull(getContext()))) {
+            GetDataInternet.getData(recyclerViewAdapter,data);
             snackbar = Snackbar
                     .make(view, "Есть интернет соединение", Snackbar.LENGTH_LONG);
         } else {
@@ -132,7 +135,7 @@ public class NewImages extends Fragment {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            if (isOnline()) {
+            if (CheskInternet.chekInternet(Objects.requireNonNull(getContext()))) {
                 getTotalCount();
                 getPostHandler.postDelayed(this, 5000);
                 if (snackbar != null && snackbar.isShown()) {
@@ -155,28 +158,28 @@ public class NewImages extends Fragment {
         }
     };
 
-    private void getData() {
-        Call<Post> call = retrofitApi.getPosts("latest", "vertical", 15);
-        call.enqueue(new Callback<Post>() {
-            @Override
-            public void onResponse(Call<Post> call, Response<Post> response) {
-                data.clear();
-                Post posts = response.body();
-                for (Hit hit : posts.getHits()) {
-                    data.add(new DataBase(hit.getWebformatURL(), hit.getUser(), hit.getTags()));
-                }
-                recyclerViewAdapter.notifyDataSetChanged();
-                totalCount = posts.getTotal();
-
-            }
-
-            @Override
-            public void onFailure(Call<Post> call, Throwable t) {
-
-            }
-
-        });
-    }
+//    private void getData() {
+//        Call<Post> call = retrofitApi.getPosts("latest", "vertical", 15);
+//        call.enqueue(new Callback<Post>() {
+//            @Override
+//            public void onResponse(Call<Post> call, Response<Post> response) {
+//                data.clear();
+//                Post posts = response.body();
+//                for (Hit hit : posts.getHits()) {
+//                    data.add(new DataBase(hit.getWebformatURL(), hit.getUser(), hit.getTags()));
+//                }
+//                recyclerViewAdapter.notifyDataSetChanged();
+//                totalCount = posts.getTotal();
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Post> call, Throwable t) {
+//
+//            }
+//
+//        });
+//    }
 
     private void getTotalCount() {
         Call<Post> call = retrofitApi.getTotal("latest", "vertical", 3);
@@ -185,7 +188,7 @@ public class NewImages extends Fragment {
             public void onResponse(Call<Post> call, Response<Post> response) {
                 Post posts = response.body();
                 if (posts.getTotal() > totalCount) {
-                    getData();
+                    GetDataInternet.getData(recyclerViewAdapter,data);
                     totalCount = posts.getTotal();
                 }
             }
@@ -195,14 +198,6 @@ public class NewImages extends Fragment {
             }
         });
     }
-
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
     private int getCurrentItem() {
         return ((LinearLayoutManager) recyclerView.getLayoutManager())
                 .findFirstVisibleItemPosition();
