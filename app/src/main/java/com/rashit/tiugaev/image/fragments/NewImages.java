@@ -20,6 +20,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,14 +54,10 @@ public class NewImages extends Fragment {
     private RecyclerViewAdapter recyclerViewAdapter;
     private List<DataBase> data;
     private Handler getPostHandler;
-    private int totalCount;
-    private Retrofit retrofit;
-    private RetrofitApi retrofitApi;
     private Snackbar snackbar;
     private View snakView;
     private NotesDatabase notesDatabase;
     private MyViewModel myViewModel;
-    private Context context;
 
     public NewImages() {
         // Required empty public constructor
@@ -106,14 +103,6 @@ public class NewImages extends Fragment {
                 }
             }
         });
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl("https://pixabay.com/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        retrofitApi = retrofit.create(RetrofitApi.class);
-
-        totalCount = 0;
         getPostHandler = new Handler();
         getPostHandler.postDelayed(runnable, 5000);
 
@@ -136,7 +125,10 @@ public class NewImages extends Fragment {
         @Override
         public void run() {
             if (CheskInternet.chekInternet(Objects.requireNonNull(getContext()))) {
-                getTotalCount();
+                GetDataInternet.getTotalCount();
+                if (GetDataInternet.getAfterTotal()> GetDataInternet.getBeforeTotal()){
+                    GetDataInternet.getData(recyclerViewAdapter,data);
+                }
                 getPostHandler.postDelayed(this, 5000);
                 if (snackbar != null && snackbar.isShown()) {
                     snackbar = Snackbar
@@ -144,8 +136,8 @@ public class NewImages extends Fragment {
                     snakView = snackbar.getView();
                     snakView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                     snackbar.show();
-                }
 
+                }
             } else {
                 if (snackbar.isShown()) {
                 } else {
@@ -158,46 +150,6 @@ public class NewImages extends Fragment {
         }
     };
 
-//    private void getData() {
-//        Call<Post> call = retrofitApi.getPosts("latest", "vertical", 15);
-//        call.enqueue(new Callback<Post>() {
-//            @Override
-//            public void onResponse(Call<Post> call, Response<Post> response) {
-//                data.clear();
-//                Post posts = response.body();
-//                for (Hit hit : posts.getHits()) {
-//                    data.add(new DataBase(hit.getWebformatURL(), hit.getUser(), hit.getTags()));
-//                }
-//                recyclerViewAdapter.notifyDataSetChanged();
-//                totalCount = posts.getTotal();
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Post> call, Throwable t) {
-//
-//            }
-//
-//        });
-//    }
-
-    private void getTotalCount() {
-        Call<Post> call = retrofitApi.getTotal("latest", "vertical", 3);
-        call.enqueue(new Callback<Post>() {
-            @Override
-            public void onResponse(Call<Post> call, Response<Post> response) {
-                Post posts = response.body();
-                if (posts.getTotal() > totalCount) {
-                    GetDataInternet.getData(recyclerViewAdapter,data);
-                    totalCount = posts.getTotal();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Post> call, Throwable t) {
-            }
-        });
-    }
     private int getCurrentItem() {
         return ((LinearLayoutManager) recyclerView.getLayoutManager())
                 .findFirstVisibleItemPosition();

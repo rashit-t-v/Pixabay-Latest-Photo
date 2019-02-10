@@ -3,6 +3,7 @@ import com.rashit.tiugaev.image.Hit;
 import com.rashit.tiugaev.image.Post;
 import com.rashit.tiugaev.image.adapters.RecyclerViewAdapter;
 import com.rashit.tiugaev.image.dataBase.DataBase;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,6 +18,8 @@ public class GetDataInternet {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
     private static RetrofitApi retrofitApi;
+    private static int beforeTotal;
+    private static int afterTotal;
 
     public static void getData(final RecyclerViewAdapter adapter, final List<DataBase> data){
         retrofitApi = retrofit.create(RetrofitApi.class);
@@ -31,29 +34,36 @@ public class GetDataInternet {
                     data.add(new DataBase(hit.getWebformatURL(), hit.getUser(), hit.getTags()));
                 }
                 adapter.notifyDataSetChanged();
-
+                beforeTotal = posts.getTotal();
             }
-
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
-
             }
-
         });
     }
-
     public static void getTotalCount() {
         Call<Post> call = retrofitApi.getTotal("latest", "vertical", 3);
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
                 Post posts = response.body();
+                if (posts.getTotal() > beforeTotal) {
+                    afterTotal = posts.getTotal();
+                    beforeTotal = posts.getTotal();
+                }
             }
-
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
             }
         });
 
+    }
+
+    public static int getBeforeTotal() {
+        return beforeTotal;
+    }
+
+    public static int getAfterTotal() {
+        return afterTotal;
     }
 }

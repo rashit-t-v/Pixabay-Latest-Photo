@@ -6,17 +6,6 @@
     android:background="#000"
     android:layout_height="match_parent"
     tools:context=".fragments.NewImages">
-
-    <!-- TODO: Update blank fragment layout -->
-    <!--<androidx.core.widget.NestedScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-    <!--<TextView-->
-        <!--android:layout_marginTop="80dp"-->
-        <!--android:id="@+id/textViewNews"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-<!--</androidx.core.widget.NestedScrollView>-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RV_New_Images"
         android:layout_width="match_parent"
