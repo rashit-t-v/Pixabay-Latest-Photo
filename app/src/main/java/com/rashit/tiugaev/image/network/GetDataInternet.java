@@ -24,7 +24,7 @@ public class GetDataInternet {
     public static void getData(final RecyclerViewAdapter adapter, final List<DataBase> data){
         retrofitApi = retrofit.create(RetrofitApi.class);
 
-        Call<Post> call = retrofitApi.getPosts("latest", "vertical", 15);
+        Call<Post> call = retrofitApi.getPosts("latest", "vertical", 20);
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {

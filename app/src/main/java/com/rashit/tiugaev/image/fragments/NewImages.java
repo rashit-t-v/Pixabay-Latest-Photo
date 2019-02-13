@@ -1,7 +1,6 @@
 package com.rashit.tiugaev.image.fragments;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,14 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,16 +21,13 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.rashit.tiugaev.image.Hit;
-import com.rashit.tiugaev.image.Post;
 import com.rashit.tiugaev.image.R;
 import com.rashit.tiugaev.image.activity.Detail;
 import com.rashit.tiugaev.image.adapters.RecyclerViewAdapter;
 import com.rashit.tiugaev.image.dataBase.DataBase;
-import com.rashit.tiugaev.image.dataBase.NotesDatabase;
+import com.rashit.tiugaev.image.dataBase.VersionDatabase;
 import com.rashit.tiugaev.image.network.CheskInternet;
 import com.rashit.tiugaev.image.network.GetDataInternet;
-import com.rashit.tiugaev.image.network.RetrofitApi;
 import com.rashit.tiugaev.image.viewmodel.MyViewModel;
 
 import java.util.ArrayList;
@@ -56,7 +46,7 @@ public class NewImages extends Fragment {
     private Handler getPostHandler;
     private Snackbar snackbar;
     private View snakView;
-    private NotesDatabase notesDatabase;
+    private VersionDatabase versionDatabase;
     private MyViewModel myViewModel;
 
     public NewImages() {
@@ -67,7 +57,7 @@ public class NewImages extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_new_images, container, false);
         recyclerView = view.findViewById(R.id.RV_New_Images);
-        notesDatabase = NotesDatabase.getInstance(getContext());
+        versionDatabase = VersionDatabase.getInstance(getContext());
         myViewModel = ViewModelProviders.of(getActivity()).get(MyViewModel.class);
 
         data = new ArrayList<>();
@@ -77,7 +67,7 @@ public class NewImages extends Fragment {
         recyclerView.setAdapter(recyclerViewAdapter);
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
-        recyclerViewAdapter.setNoteCliick(new RecyclerViewAdapter.NoteCliick() {
+        recyclerViewAdapter.setItemCliick(new RecyclerViewAdapter.ItemCliick() {
             @Override
             public void onNoteClick(int position, View view) {
                 if (view.getId() == R.id.imagePoster) {
@@ -94,8 +84,8 @@ public class NewImages extends Fragment {
             public void onCheckedChanged(final int position, CompoundButton button, boolean ischeked) {
                 if (ischeked) {
                     button.setChecked(true);
-                    DataBase notsForDataBase = new DataBase(data.get(position).getWeb(), data.get(position).getUser(), data.get(position).getTag());
-                    myViewModel.insetNote(notsForDataBase);
+                    DataBase itemForDataBase = new DataBase(data.get(position).getWeb(), data.get(position).getUser(), data.get(position).getTag());
+                    myViewModel.insetItem(itemForDataBase);
                     button.setBackground(getResources().getDrawable(R.drawable.ic_star_cheked));
                     Toast.makeText(getContext(), "Добавлено в избранное.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -156,7 +146,7 @@ public class NewImages extends Fragment {
     }
 
     private void getDataDB() {
-        LiveData<List<DataBase>> notsFromDb = notesDatabase.notesDao().getAllNotes();
+        LiveData<List<DataBase>> notsFromDb = versionDatabase.mDao().getAllNotes();
         notsFromDb.observe(getActivity(), new Observer<List<DataBase>>() {
             @Override
             public void onChanged(List<DataBase> dataBases1) {

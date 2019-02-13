@@ -10,15 +10,15 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-@Dao
-public interface NotesDao {
+@androidx.room.Dao
+public interface ItemDao {
 
     @Query("SELECT * FROM `favorits`")
      LiveData<List<DataBase>> getAllNotes();
 
     @Insert
-    void insetNote(DataBase dataBase);
+    void insertItem(DataBase dataBase);
 
     @Delete
-    void deletetNote(DataBase dataBase);
+    void deletetItem(DataBase dataBase);
 }

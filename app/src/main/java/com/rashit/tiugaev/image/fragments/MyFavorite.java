@@ -3,7 +3,6 @@ package com.rashit.tiugaev.image.fragments;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -71,7 +70,7 @@ public class MyFavorite extends Fragment {
     }
 
     private void getData() {
-        LiveData<List<DataBase>> notsFromDb = myViewModel.getNotes();
+        LiveData<List<DataBase>> notsFromDb = myViewModel.getItems();
         notsFromDb.observe(getActivity(), new Observer<List<DataBase>>() {
             @Override
             public void onChanged(List<DataBase> dataBases1) {
@@ -83,7 +82,7 @@ public class MyFavorite extends Fragment {
 
     private void removeNote(final int position) {
         DataBase dataBase = favoriteRecAdapter.getNotes().get(position);
-        myViewModel.deleteNote(dataBase);
+        myViewModel.deleteItem(dataBase);
 
     }
 

@@ -26,7 +26,7 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
-    private NoteCliick noteCliick;
+    private ItemCliick itemCliick;
     private OnCheckedChangeListener onCheckedChangeListener;
 
     public void setOnCheckedChangeListener(OnCheckedChangeListener onCheckedChangeListener) {
@@ -36,15 +36,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context context;
     private List<DataBase> data;
 
-    public interface NoteCliick {
+    public interface ItemCliick {
         void onNoteClick(int position, View view);
     }
     public interface OnCheckedChangeListener {
         void onCheckedChanged(int position, CompoundButton button, boolean ischeked);
     }
 
-    public void setNoteCliick(NoteCliick noteCliick) {
-        this.noteCliick = noteCliick;
+    public void setItemCliick(ItemCliick itemCliick) {
+        this.itemCliick = itemCliick;
     }
 
     public RecyclerViewAdapter(Context context, List<DataBase> data) {
@@ -63,7 +63,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
-        holder.name.setText("User: " + data.get(position).getUser());
+        holder.name.setText("By: " + data.get(position).getUser());
         holder.tags.setText("Tags: " + data.get(position).getTag());
         Glide.with(context).load(data.get(position).getWeb())
                 .apply(bitmapTransform(new BlurTransformation(1, 5)))
@@ -102,8 +102,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @Override
         public void onClick(View v) {
-            if (noteCliick != null) {
-                noteCliick.onNoteClick(getAdapterPosition(),v);
+            if (itemCliick != null) {
+                itemCliick.onNoteClick(getAdapterPosition(),v);
             }
         }
 
