@@ -5,7 +5,6 @@ import com.rashit.tiugaev.image.dataBase.DataBase;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -21,4 +20,11 @@ public interface ItemDao {
 
     @Delete
     void deletetItem(DataBase dataBase);
+
+    @Query("DELETE FROM `favorits` WHERE id = :userId")
+    int deleteByUserId(int userId);
+
+    @Query("SELECT * FROM `favorits` WHERE id = :userId")
+    boolean searchByUserId(int userId);
+
 }

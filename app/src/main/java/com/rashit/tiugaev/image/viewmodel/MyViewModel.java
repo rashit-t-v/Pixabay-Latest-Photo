@@ -1,13 +1,10 @@
 package com.rashit.tiugaev.image.viewmodel;
-
 import android.app.Application;
 import android.os.AsyncTask;
-
 import com.rashit.tiugaev.image.dataBase.DataBase;
 import com.rashit.tiugaev.image.dataBase.VersionDatabase;
-
+import com.rashit.tiugaev.image.mvp.callback.Photo;
 import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -57,4 +54,44 @@ public class MyViewModel extends AndroidViewModel {
             return null;
         }
     }
+    public void deleteItemById(Integer integer) {
+        new DeleteItemIdDataBaseTask().execute(integer);
+    }
+    private static class DeleteItemIdDataBaseTask extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... dataBases) {
+            if (dataBases != null && dataBases.length > 0) {
+                database.mDao().deleteByUserId(dataBases[0]);
+            }
+            return null;
+        }
+    }
+    public void searchItemById(Integer integer, Photo photo) {
+        new SearchItemIdDataBaseTaskk(photo).execute(integer);
+    }
+    private class  SearchItemIdDataBaseTaskk extends AsyncTask<Integer, Void, Boolean> {
+        //interface
+        public Photo photo = null;
+
+        public SearchItemIdDataBaseTaskk(Photo photo) {
+            this.photo = photo;
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... dataBases) {
+            if (dataBases != null && dataBases.length > 0) {
+                if (database.mDao().searchByUserId(dataBases[0])) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            photo.onSearchComliteByUserId(aBoolean);
+        }
+    }
+
 }

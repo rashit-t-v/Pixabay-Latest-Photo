@@ -27,11 +27,11 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
     private ItemCliick itemCliick;
-    private OnCheckedChangeListener onCheckedChangeListener;
-
-    public void setOnCheckedChangeListener(OnCheckedChangeListener onCheckedChangeListener) {
-        this.onCheckedChangeListener = onCheckedChangeListener;
-    }
+//    private OnCheckedChangeListener onCheckedChangeListener;
+//
+//    public void setOnCheckedChangeListener(OnCheckedChangeListener onCheckedChangeListener) {
+//        this.onCheckedChangeListener = onCheckedChangeListener;
+//    }
 
     private Context context;
     private List<DataBase> data;
@@ -39,9 +39,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public interface ItemCliick {
         void onNoteClick(int position, View view);
     }
-    public interface OnCheckedChangeListener {
-        void onCheckedChanged(int position, CompoundButton button, boolean ischeked);
-    }
+//    public interface OnCheckedChangeListener {
+//        void onCheckedChanged(int position, CompoundButton button, boolean ischeked);
+//    }
 
     public void setItemCliick(ItemCliick itemCliick) {
         this.itemCliick = itemCliick;
@@ -80,13 +80,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView name;
         private TextView tags;
         private ImageView imfeFont;
         private ImageView imagePoster;
-        private CheckBox favorite;
+//        private CheckBox favorite;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,9 +94,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imagePoster = itemView.findViewById(R.id.imagePoster);
             name = itemView.findViewById(R.id.textViewName);
             tags = itemView.findViewById(R.id.textViewTag);
-            favorite = itemView.findViewById(R.id.checkBox);
+//            favorite = itemView.findViewById(R.id.checkBox);
             imagePoster.setOnClickListener(this);
-            favorite.setOnCheckedChangeListener(this);
 
         }
 
@@ -107,11 +106,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         }
 
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if(onCheckedChangeListener != null){
-                onCheckedChangeListener.onCheckedChanged(getAdapterPosition(),buttonView,isChecked);
-            }
-        }
+//        @Override
+//        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//            if(onCheckedChangeListener != null){
+//                onCheckedChangeListener.onCheckedChanged(getAdapterPosition(),buttonView,isChecked);
+//            }
+//        }
     }
 }

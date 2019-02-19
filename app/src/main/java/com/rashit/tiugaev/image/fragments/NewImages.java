@@ -1,25 +1,17 @@
 package com.rashit.tiugaev.image.fragments;
-
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Toast;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.rashit.tiugaev.image.R;
 import com.rashit.tiugaev.image.activity.Detail;
@@ -28,8 +20,6 @@ import com.rashit.tiugaev.image.dataBase.DataBase;
 import com.rashit.tiugaev.image.dataBase.VersionDatabase;
 import com.rashit.tiugaev.image.network.CheskInternet;
 import com.rashit.tiugaev.image.network.GetDataInternet;
-import com.rashit.tiugaev.image.viewmodel.MyViewModel;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +27,7 @@ import java.util.Objects;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewImages extends Fragment {
+public class NewImages extends Fragment{
 
     private View view;
     private RecyclerView recyclerView;
@@ -47,7 +37,7 @@ public class NewImages extends Fragment {
     private Snackbar snackbar;
     private View snakView;
     private VersionDatabase versionDatabase;
-    private MyViewModel myViewModel;
+    private boolean state;
 
     public NewImages() {
         // Required empty public constructor
@@ -58,7 +48,6 @@ public class NewImages extends Fragment {
         view = inflater.inflate(R.layout.fragment_new_images, container, false);
         recyclerView = view.findViewById(R.id.RV_New_Images);
         versionDatabase = VersionDatabase.getInstance(getContext());
-        myViewModel = ViewModelProviders.of(getActivity()).get(MyViewModel.class);
 
         data = new ArrayList<>();
         recyclerViewAdapter = new RecyclerViewAdapter(getContext(), data);
@@ -71,40 +60,29 @@ public class NewImages extends Fragment {
             @Override
             public void onNoteClick(int position, View view) {
                 if (view.getId() == R.id.imagePoster) {
-                    String url = data.get(position).getWeb();
                     Intent intent = new Intent(getContext(), Detail.class);
-                    intent.putExtra("url", url);
+                    intent.putExtra("id", data.get(position).getId());
+                    intent.putExtra("url", data.get(position).getWeb());
+                    intent.putExtra("userName", data.get(position).getUser());
+                    intent.putExtra("tags", data.get(position).getTag());
                     startActivity(intent);
                 }
+
             }
 
-        });
-        recyclerViewAdapter.setOnCheckedChangeListener(new RecyclerViewAdapter.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(final int position, CompoundButton button, boolean ischeked) {
-                if (ischeked) {
-                    button.setChecked(true);
-                    DataBase itemForDataBase = new DataBase(data.get(position).getWeb(), data.get(position).getUser(), data.get(position).getTag());
-                    myViewModel.insetItem(itemForDataBase);
-                    button.setBackground(getResources().getDrawable(R.drawable.ic_star_cheked));
-                    Toast.makeText(getContext(), "Добавлено в избранное.", Toast.LENGTH_SHORT).show();
-                } else {
-                    button.setChecked(true);
-                }
-            }
         });
         getPostHandler = new Handler();
         getPostHandler.postDelayed(runnable, 5000);
-
         if (CheskInternet.chekInternet(Objects.requireNonNull(getContext()))) {
-            GetDataInternet.getData(recyclerViewAdapter,data);
+            GetDataInternet.getData(recyclerViewAdapter, data);
             snackbar = Snackbar
-                    .make(view, "Есть интернет соединение", Snackbar.LENGTH_LONG);
+                    .make(view, "Internet connected", Snackbar.LENGTH_LONG);
         } else {
             snackbar = Snackbar
-                    .make(view, "Нет интернет соединения", Snackbar.LENGTH_INDEFINITE);
+                    .make(view, "Not internet connection", Snackbar.LENGTH_INDEFINITE);
             snackbar.show();
             getDataDB();
+            state = true;
         }
 
         return view;
@@ -116,13 +94,17 @@ public class NewImages extends Fragment {
         public void run() {
             if (CheskInternet.chekInternet(Objects.requireNonNull(getContext()))) {
                 GetDataInternet.getTotalCount();
-                if (GetDataInternet.getAfterTotal()> GetDataInternet.getBeforeTotal()){
-                    GetDataInternet.getData(recyclerViewAdapter,data);
+                if (state){
+                    GetDataInternet.getData(recyclerViewAdapter, data);
+                    state=false;
                 }
-                getPostHandler.postDelayed(this, 5000);
+                if (GetDataInternet.getAfterTotal() > GetDataInternet.getBeforeTotal()) {
+                    GetDataInternet.getData(recyclerViewAdapter, data);
+                }
+                getPostHandler.postDelayed(this, 20000);
                 if (snackbar != null && snackbar.isShown()) {
                     snackbar = Snackbar
-                            .make(view, "Есть интернет соединение", Snackbar.LENGTH_LONG);
+                            .make(view, "Internet connected", Snackbar.LENGTH_LONG);
                     snakView = snackbar.getView();
                     snakView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                     snackbar.show();
@@ -132,18 +114,13 @@ public class NewImages extends Fragment {
                 if (snackbar.isShown()) {
                 } else {
                     snackbar = Snackbar
-                            .make(view, "Нет интернет соединения", Snackbar.LENGTH_INDEFINITE);
+                            .make(view, "Not internet connection", Snackbar.LENGTH_INDEFINITE);
                     snackbar.show();
                 }
-                getPostHandler.postDelayed(this, 5000);
+                getPostHandler.postDelayed(this, 20000);
             }
         }
     };
-
-    private int getCurrentItem() {
-        return ((LinearLayoutManager) recyclerView.getLayoutManager())
-                .findFirstVisibleItemPosition();
-    }
 
     private void getDataDB() {
         LiveData<List<DataBase>> notsFromDb = versionDatabase.mDao().getAllNotes();
@@ -164,7 +141,5 @@ public class NewImages extends Fragment {
         getPostHandler.removeCallbacks(runnable);
         view = null;
     }
-
-
 
 }

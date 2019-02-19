@@ -49,7 +49,6 @@ public class FavoriteRecAdapter extends RecyclerView.Adapter<FavoriteRecAdapter.
         Glide.with(context).load(notes.get(position).getWeb())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .into(holder.imageFavorite);
-        holder.userName.setText(notes.get(position).getUser());
     }
 
     @Override
@@ -59,12 +58,10 @@ public class FavoriteRecAdapter extends RecyclerView.Adapter<FavoriteRecAdapter.
 
     class FavoritHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView imageFavorite;
-        private TextView userName;
 
         public FavoritHolder(@NonNull View itemView) {
             super(itemView);
             imageFavorite = itemView.findViewById(R.id.imageViewFavorite);
-            userName = itemView.findViewById(R.id.textViewUserName);
             imageFavorite.setOnClickListener(this);
         }
 

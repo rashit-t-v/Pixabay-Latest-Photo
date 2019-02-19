@@ -31,7 +31,7 @@ public class GetDataInternet {
                 data.clear();
                 Post posts = response.body();
                 for (Hit hit : posts.getHits()) {
-                    data.add(new DataBase(hit.getWebformatURL(), hit.getUser(), hit.getTags()));
+                    data.add(new DataBase(hit.getId(),hit.getWebformatURL(), hit.getUser(), hit.getTags()));
                 }
                 adapter.notifyDataSetChanged();
                 beforeTotal = posts.getTotal();
@@ -42,6 +42,7 @@ public class GetDataInternet {
         });
     }
     public static void getTotalCount() {
+        retrofitApi = retrofit.create(RetrofitApi.class);
         Call<Post> call = retrofitApi.getTotal("latest", "vertical", 3);
         call.enqueue(new Callback<Post>() {
             @Override

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "favorits")
 public class DataBase {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private int id;
     private String web;
     private String user;
@@ -18,12 +18,7 @@ public class DataBase {
         this.user = user;
         this.tag = tag;
     }
-    @Ignore
-    public DataBase(String web, String user, String tag) {
-        this.web = web;
-        this.user = user;
-        this.tag = tag;
-    }
+
 
     public int getId() {
         return id;

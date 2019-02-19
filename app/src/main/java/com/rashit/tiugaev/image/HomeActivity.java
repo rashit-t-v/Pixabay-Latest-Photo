@@ -7,16 +7,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import com.google.android.material.tabs.TabLayout;
 import com.rashit.tiugaev.image.adapters.VievPageAdapter;
 import com.rashit.tiugaev.image.fragments.MyFavorite;
 import com.rashit.tiugaev.image.fragments.NewImages;
 
 public class HomeActivity extends AppCompatActivity {
-
-    private ImageView blurimage;
-    private ImageView poster;
     private TabLayout tableLayout;
     private ViewPager viewPager;
     private ConstraintSet.Constraint constraint;
@@ -32,8 +28,8 @@ public class HomeActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
 
         VievPageAdapter vievPageAdapter = new VievPageAdapter(getSupportFragmentManager());
-        vievPageAdapter.AddFragment(new NewImages(),"Новые");
-        vievPageAdapter.AddFragment(new MyFavorite(),"Избранные");
+        vievPageAdapter.AddFragment(new NewImages(),"Latest Photo");
+        vievPageAdapter.AddFragment(new MyFavorite(),"Favorite");
         viewPager.setAdapter(vievPageAdapter);
         tableLayout.setupWithViewPager(viewPager);
 

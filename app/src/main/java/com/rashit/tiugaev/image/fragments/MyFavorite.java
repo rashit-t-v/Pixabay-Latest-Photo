@@ -53,7 +53,6 @@ public class MyFavorite extends Fragment {
             @Override
             public void onNoteClick(final int position) {
                 removeNote(position);
-
             }
         });
 
