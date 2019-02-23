@@ -13,11 +13,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.rashit.tiugaev.image.R;
 import com.rashit.tiugaev.image.dataBase.DataBase;
-import com.rashit.tiugaev.image.dataBase.VersionDatabase;
-import com.rashit.tiugaev.image.mvp.callback.Photo;
 import com.rashit.tiugaev.image.viewmodel.MyViewModel;
 
-public class Detail extends AppCompatActivity implements Photo {
+public class Detail extends AppCompatActivity implements DetailCallBack {
     private ImageView full, infoPhoto, dowloadPhoto;
     private int id;
     private String fullUrl;

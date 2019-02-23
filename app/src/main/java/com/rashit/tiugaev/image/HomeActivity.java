@@ -10,7 +10,7 @@ import android.view.WindowManager;
 import com.google.android.material.tabs.TabLayout;
 import com.rashit.tiugaev.image.adapters.VievPageAdapter;
 import com.rashit.tiugaev.image.fragments.MyFavorite;
-import com.rashit.tiugaev.image.fragments.NewImages;
+import com.rashit.tiugaev.image.fragments.PhotoFragment;
 
 public class HomeActivity extends AppCompatActivity {
     private TabLayout tableLayout;
@@ -28,8 +28,8 @@ public class HomeActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
 
         VievPageAdapter vievPageAdapter = new VievPageAdapter(getSupportFragmentManager());
-        vievPageAdapter.AddFragment(new NewImages(),"Latest Photo");
-        vievPageAdapter.AddFragment(new MyFavorite(),"Favorite");
+        vievPageAdapter.AddFragment(new PhotoFragment(),"LATEST");
+        vievPageAdapter.AddFragment(new MyFavorite(),"FAVORITE");
         viewPager.setAdapter(vievPageAdapter);
         tableLayout.setupWithViewPager(viewPager);
 

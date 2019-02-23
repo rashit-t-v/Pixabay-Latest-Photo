@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#000"
     android:layout_height="match_parent"
-    tools:context=".fragments.NewImages">
+    android:background="#000"
+    tools:context=".fragments.PhotoFragment">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RV_New_Images"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/recyckler_item"/>
+        tools:listitem="@layout/recyckler_item" />
+
 </FrameLayout>

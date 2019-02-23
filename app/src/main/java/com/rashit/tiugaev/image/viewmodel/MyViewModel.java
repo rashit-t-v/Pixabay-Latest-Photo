@@ -3,7 +3,8 @@ import android.app.Application;
 import android.os.AsyncTask;
 import com.rashit.tiugaev.image.dataBase.DataBase;
 import com.rashit.tiugaev.image.dataBase.VersionDatabase;
-import com.rashit.tiugaev.image.mvp.callback.Photo;
+import com.rashit.tiugaev.image.activity.DetailCallBack;
+
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -67,14 +68,14 @@ public class MyViewModel extends AndroidViewModel {
             return null;
         }
     }
-    public void searchItemById(Integer integer, Photo photo) {
+    public void searchItemById(Integer integer, DetailCallBack photo) {
         new SearchItemIdDataBaseTaskk(photo).execute(integer);
     }
     private class  SearchItemIdDataBaseTaskk extends AsyncTask<Integer, Void, Boolean> {
         //interface
-        public Photo photo = null;
+        public DetailCallBack photo = null;
 
-        public SearchItemIdDataBaseTaskk(Photo photo) {
+        public SearchItemIdDataBaseTaskk(DetailCallBack photo) {
             this.photo = photo;
         }
 

@@ -8,11 +8,14 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.rashit.tiugaev.image.Hit;
 import com.rashit.tiugaev.image.R;
 import com.rashit.tiugaev.image.dataBase.DataBase;
 
@@ -34,7 +37,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //    }
 
     private Context context;
-    private List<DataBase> data;
+    private List<Hit> data;
 
     public interface ItemCliick {
         void onNoteClick(int position, View view);
@@ -47,7 +50,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.itemCliick = itemCliick;
     }
 
-    public RecyclerViewAdapter(Context context, List<DataBase> data) {
+    public RecyclerViewAdapter(Context context, List<Hit> data) {
         this.context = context;
         this.data = data;
     }
@@ -58,20 +61,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.recyckler_item, parent, false);
         MyViewHolder myViewHolder = new MyViewHolder(view);
+
         return myViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         holder.name.setText("By: " + data.get(position).getUser());
-        holder.tags.setText("Tags: " + data.get(position).getTag());
-        Glide.with(context).load(data.get(position).getWeb())
-                .apply(bitmapTransform(new BlurTransformation(1, 5)))
-                .into(holder.imfeFont);
-        Glide.with(context).load(data.get(position).getWeb())
+        holder.tags.setText("Tags: " + data.get(position).getTags());
+        Glide.with(context).load(data.get(position).getWebformatURL())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(74)))
                 .into(holder.imagePoster);
+
     }
 
     @Override
@@ -84,17 +86,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         private TextView name;
         private TextView tags;
-        private ImageView imfeFont;
         private ImageView imagePoster;
-//        private CheckBox favorite;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            imfeFont = itemView.findViewById(R.id.imageView);
             imagePoster = itemView.findViewById(R.id.imagePoster);
             name = itemView.findViewById(R.id.textViewName);
             tags = itemView.findViewById(R.id.textViewTag);
-//            favorite = itemView.findViewById(R.id.checkBox);
             imagePoster.setOnClickListener(this);
 
         }

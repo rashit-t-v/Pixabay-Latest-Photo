@@ -17,22 +17,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline55"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.12" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
-        app:tabTextAppearance="@style/MyCustomTextAppearance"
-        app:tabGravity="center"
-        app:tabTextColor="#bfbfbf"
-        app:tabSelectedTextColor="@color/colorWhite"
-        app:tabContentStart="30dp"
-        app:tabIndicatorColor="@color/colorWhite"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline55"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabGravity="center"
+        app:tabIndicatorColor="@color/colorWhite"
         app:tabIndicatorFullWidth="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:tabSelectedTextColor="@color/colorWhite"
+        app:tabTextAppearance="@style/MyCustomTextAppearance"
+        app:tabTextColor="#bfbfbf">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabItem"
