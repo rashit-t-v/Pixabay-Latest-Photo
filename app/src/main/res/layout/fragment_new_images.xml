@@ -8,6 +8,8 @@
     tools:context=".fragments.PhotoFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:padding="2dp"
+        android:layout_marginTop="70dp"
         android:id="@+id/RV_New_Images"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

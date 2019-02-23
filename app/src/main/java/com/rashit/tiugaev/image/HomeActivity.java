@@ -28,7 +28,7 @@ public class HomeActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
 
         VievPageAdapter vievPageAdapter = new VievPageAdapter(getSupportFragmentManager());
-        vievPageAdapter.AddFragment(new PhotoFragment(),"LATEST");
+        vievPageAdapter.AddFragment(new PhotoFragment(),"PHOTO");
         vievPageAdapter.AddFragment(new MyFavorite(),"FAVORITE");
         viewPager.setAdapter(vievPageAdapter);
         tableLayout.setupWithViewPager(viewPager);

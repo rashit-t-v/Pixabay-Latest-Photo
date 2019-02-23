@@ -1,6 +1,6 @@
 package com.rashit.tiugaev.image.mvp.presenter;
 
-import com.rashit.tiugaev.image.Hit;
+import com.rashit.tiugaev.image.pojo.Hit;
 import com.rashit.tiugaev.image.mvp.callback.PhotoCallBack;
 import com.rashit.tiugaev.image.mvp.model.PhotoModel;
 
@@ -15,15 +15,17 @@ public class PhotoPresenter implements PhotoCallBack.returnPresenter{
         returnView = returnV;
         photoModel = model;
         photoModel.setCallBack(this);
+
     }
 
-    public void getData (String order, String orintation, int count_per_page){
-        photoModel.getDataModel(order,orintation,count_per_page);
+    public void getData (int page, String order, String orintation, int count_per_page){
+        photoModel.getDataModel(page, order,orintation,count_per_page);
     }
 
 
     @Override
     public void onSuccses(List<Hit> dataBases) {
         returnView.showData(dataBases);
+        returnView.countPage();
     }
 }

@@ -1,6 +1,6 @@
 package com.rashit.tiugaev.image.network;
 
-import com.rashit.tiugaev.image.Post;
+import com.rashit.tiugaev.image.pojo.Post;
 
 
 import retrofit2.Call;
@@ -11,6 +11,7 @@ public interface RetrofitApi {
     String KEY = "?key=10290517-dc79227a5978a569b0208a078";
     @GET (KEY)
     Call<Post> getPosts(
+            @Query("page") int page,
             @Query("order") String order,
             @Query("orientation") String orientation,
             @Query("per_page") int count_per_page

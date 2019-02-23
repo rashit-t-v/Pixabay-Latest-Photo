@@ -1,4 +1,4 @@
-package com.rashit.tiugaev.image;
+package com.rashit.tiugaev.image.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

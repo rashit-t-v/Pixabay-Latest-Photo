@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import com.rashit.tiugaev.image.R;
 import com.rashit.tiugaev.image.adapters.FavoriteRecAdapter;
 import com.rashit.tiugaev.image.dataBase.DataBase;
-import com.rashit.tiugaev.image.viewmodel.MyViewModel;
+import com.rashit.tiugaev.image.dataBase.MyViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +49,10 @@ public class MyFavorite extends Fragment {
         final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(favoriteRecAdapter);
-        favoriteRecAdapter.setNoteCliick(new FavoriteRecAdapter.NoteCliick() {
+        favoriteRecAdapter.setItemCliick(new FavoriteRecAdapter.ItemCliick() {
             @Override
             public void onNoteClick(final int position) {
-                removeNote(position);
+                removeItems(position);
             }
         });
 
@@ -69,19 +69,21 @@ public class MyFavorite extends Fragment {
     }
 
     private void getData() {
-        LiveData<List<DataBase>> notsFromDb = myViewModel.getItems();
-        notsFromDb.observe(getActivity(), new Observer<List<DataBase>>() {
+        LiveData<List<DataBase>> itemsFromDb = myViewModel.getItems();
+        itemsFromDb.observe(getActivity(), new Observer<List<DataBase>>() {
             @Override
             public void onChanged(List<DataBase> dataBases1) {
-                favoriteRecAdapter.setNotes(dataBases1);
+                favoriteRecAdapter.setItems(dataBases1);
+                favoriteRecAdapter.notifyDataSetChanged();
             }
         });
 
     }
 
-    private void removeNote(final int position) {
-        DataBase dataBase = favoriteRecAdapter.getNotes().get(position);
+    private void removeItems(final int position) {
+        DataBase dataBase = favoriteRecAdapter.getItems().get(position);
         myViewModel.deleteItem(dataBase);
+        favoriteRecAdapter.notifyItemRemoved(position);
 
     }
 

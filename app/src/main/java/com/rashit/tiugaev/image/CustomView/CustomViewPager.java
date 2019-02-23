@@ -23,14 +23,14 @@ public class CustomViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-//        return disable ? false : super.onInterceptTouchEvent(event);
-        return false;
+        return disable ? false : super.onInterceptTouchEvent(event);
+//        return false;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-//        return disable ? false : super.onTouchEvent(event);
-        return false;
+        return disable ? false : super.onTouchEvent(event);
+//        return false;
     }
 
     public void disableScroll(Boolean disable) {

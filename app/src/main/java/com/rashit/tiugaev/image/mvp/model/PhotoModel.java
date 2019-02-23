@@ -1,6 +1,6 @@
 package com.rashit.tiugaev.image.mvp.model;
 
-import com.rashit.tiugaev.image.Post;
+import com.rashit.tiugaev.image.pojo.Post;
 import com.rashit.tiugaev.image.mvp.callback.PhotoCallBack;
 import com.rashit.tiugaev.image.network.RetrofitApi;
 
@@ -18,8 +18,8 @@ public class PhotoModel {
     public void setCallBack (PhotoCallBack.returnPresenter returnPres){
         returnPresenter = returnPres;
     }
-    public void getDataModel (String order, String orintation, int count_per_page){
-        Call<Post> call = retrofit.getPosts(order, orintation, count_per_page);
+    public void getDataModel (int page, String order, String orintation, int count_per_page){
+        Call<Post> call = retrofit.getPosts(page, order, orintation, count_per_page);
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {

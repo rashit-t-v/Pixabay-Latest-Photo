@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -19,20 +18,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class FavoriteRecAdapter extends RecyclerView.Adapter<FavoriteRecAdapter.FavoritHolder>{
     private Context context;
-    private List<DataBase> notes;
-    private NoteCliick noteCliick;
+    private List<DataBase> dataBases;
+    private ItemCliick itemCliick;
 
-    public interface NoteCliick {
+    public interface ItemCliick {
         void onNoteClick(int position);
     }
 
-    public void setNoteCliick(NoteCliick noteCliick) {
-        this.noteCliick = noteCliick;
+    public void setItemCliick(ItemCliick itemCliick) {
+        this.itemCliick = itemCliick;
     }
 
-    public FavoriteRecAdapter(Context context, List<DataBase> notes) {
+    public FavoriteRecAdapter(Context context, List<DataBase> dataBases) {
         this.context = context;
-        this.notes = notes;
+        this.dataBases = dataBases;
     }
 
 
@@ -46,14 +45,14 @@ public class FavoriteRecAdapter extends RecyclerView.Adapter<FavoriteRecAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull FavoritHolder holder, int position) {
-        Glide.with(context).load(notes.get(position).getWeb())
+        Glide.with(context).load(dataBases.get(position).getWeb())
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
                 .into(holder.imageFavorite);
     }
 
     @Override
     public int getItemCount() {
-        return notes.size();
+        return dataBases.size();
     }
 
     class FavoritHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -67,18 +66,17 @@ public class FavoriteRecAdapter extends RecyclerView.Adapter<FavoriteRecAdapter.
 
         @Override
         public void onClick(View v) {
-            if (noteCliick != null) {
-                noteCliick.onNoteClick(getAdapterPosition());
+            if (itemCliick != null) {
+                itemCliick.onNoteClick(getAdapterPosition());
             }
         }
     }
 
-    public void setNotes(List<DataBase> notes1) {
-        this.notes = notes1;
-        notifyDataSetChanged();
+    public void setItems(List<DataBase> notes1) {
+        this.dataBases = notes1;
     }
 
-    public List<DataBase> getNotes() {
-        return notes;
+    public List<DataBase> getItems() {
+        return dataBases;
     }
 }

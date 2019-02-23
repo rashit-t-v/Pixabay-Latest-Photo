@@ -1,4 +1,4 @@
-package com.rashit.tiugaev.image.interfaces;
+package com.rashit.tiugaev.image.dataBase;
 
 import com.rashit.tiugaev.image.dataBase.DataBase;
 

@@ -1,4 +1,4 @@
-package com.rashit.tiugaev.image.viewmodel;
+package com.rashit.tiugaev.image.dataBase;
 import android.app.Application;
 import android.os.AsyncTask;
 import com.rashit.tiugaev.image.dataBase.DataBase;
@@ -31,7 +31,6 @@ public class MyViewModel extends AndroidViewModel {
     }
 
     private static class InsertDataBaseTask extends AsyncTask<DataBase, Void, Void> {
-
         @Override
         protected Void doInBackground(DataBase... dataBase) {
             if (dataBase != null && dataBase.length > 0) {
@@ -40,13 +39,11 @@ public class MyViewModel extends AndroidViewModel {
             return null;
         }
     }
-
     public void deleteItem(DataBase deleteItemDataBase) {
         new DeleteDataBaseTask().execute(deleteItemDataBase);
     }
 
     private static class DeleteDataBaseTask extends AsyncTask<DataBase, Void, Void> {
-
         @Override
         protected Void doInBackground(DataBase... dataBases) {
             if (dataBases != null && dataBases.length > 0) {
@@ -59,7 +56,6 @@ public class MyViewModel extends AndroidViewModel {
         new DeleteItemIdDataBaseTask().execute(integer);
     }
     private static class DeleteItemIdDataBaseTask extends AsyncTask<Integer, Void, Void> {
-
         @Override
         protected Void doInBackground(Integer... dataBases) {
             if (dataBases != null && dataBases.length > 0) {
@@ -74,11 +70,9 @@ public class MyViewModel extends AndroidViewModel {
     private class  SearchItemIdDataBaseTaskk extends AsyncTask<Integer, Void, Boolean> {
         //interface
         public DetailCallBack photo = null;
-
         public SearchItemIdDataBaseTaskk(DetailCallBack photo) {
             this.photo = photo;
         }
-
         @Override
         protected Boolean doInBackground(Integer... dataBases) {
             if (dataBases != null && dataBases.length > 0) {
@@ -88,7 +82,6 @@ public class MyViewModel extends AndroidViewModel {
             }
             return false;
         }
-
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             photo.onSearchComliteByUserId(aBoolean);
