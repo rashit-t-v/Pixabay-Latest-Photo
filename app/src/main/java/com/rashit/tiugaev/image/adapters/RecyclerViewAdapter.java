@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -26,7 +25,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<Hit> data;
 
     public interface ItemCliick {
-        void onNoteClick(int position, View view);
+        void onItemClick(int position, View view);
     }
 
     public void setItemCliick(ItemCliick itemCliick) {
@@ -79,7 +78,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Override
         public void onClick(View v) {
             if (itemCliick != null) {
-                itemCliick.onNoteClick(getAdapterPosition(),v);
+                itemCliick.onItemClick(getAdapterPosition(),v);
             }
         }
     }
