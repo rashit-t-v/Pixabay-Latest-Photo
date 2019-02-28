@@ -4,22 +4,27 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.rashit.tiugaev.image.pojo.Hit;
 import com.rashit.tiugaev.image.R;
 import com.rashit.tiugaev.image.activity.Detail;
 import com.rashit.tiugaev.image.adapters.RecyclerViewAdapter;
-import com.rashit.tiugaev.image.dataBase.DataBase;
 import com.rashit.tiugaev.image.dataBase.VersionDatabase;
 import com.rashit.tiugaev.image.mvp.callback.PhotoCallBack;
 import com.rashit.tiugaev.image.mvp.model.PhotoModel;
@@ -47,9 +52,15 @@ public class PhotoFragment extends Fragment implements PhotoCallBack.returnView 
     private VersionDatabase versionDatabase;
     private boolean state;
     private PhotoPresenter presenter;
+    private ImageButton btnSearchPhoto;
+    private ImageButton btnSettingPhoto;
+    private boolean state_page = true;
 
     private int page = 1;
-    private boolean state_page = true;
+    private String order = "popular";
+    private String totalSearh = "";
+    private String orientation = "all";
+
 
     public PhotoFragment() {
         // Required empty public constructor
@@ -60,7 +71,6 @@ public class PhotoFragment extends Fragment implements PhotoCallBack.returnView 
         view = inflater.inflate(R.layout.fragment_new_images, container, false);
         recyclerView = view.findViewById(R.id.RV_New_Images);
         versionDatabase = VersionDatabase.getInstance(getContext());
-
         dataHit = new ArrayList<>();
         recyclerViewAdapter = new RecyclerViewAdapter(getContext(), dataHit);
         final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
@@ -68,7 +78,7 @@ public class PhotoFragment extends Fragment implements PhotoCallBack.returnView 
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerViewAdapter.setItemCliick(new RecyclerViewAdapter.ItemCliick() {
             @Override
-            public void onNoteClick(int position, View view) {
+            public void onItemClick(int position, View view) {
                 if (view.getId() == R.id.imagePoster) {
                     Intent intent = new Intent(getContext(), Detail.class);
                     intent.putExtra("id", dataHit.get(position).getId());
@@ -83,9 +93,8 @@ public class PhotoFragment extends Fragment implements PhotoCallBack.returnView 
         getPostHandler = new Handler();
         getPostHandler.postDelayed(runnable, 2000);
         if (CheskInternet.chekInternet(Objects.requireNonNull(getContext()))) {
-            presenter.getData(1, "latest", "all", 18);
-            snackbar = Snackbar
-                    .make(view, "Internet connected", Snackbar.LENGTH_LONG);
+            presenter.getData(page, order, totalSearh, orientation, 18);
+            snackbar = Snackbar.make(view, "Internet connected", Snackbar.LENGTH_LONG);
         } else {
             snackbar = Snackbar
                     .make(view, "Not internet connection", Snackbar.LENGTH_INDEFINITE);
@@ -97,13 +106,107 @@ public class PhotoFragment extends Fragment implements PhotoCallBack.returnView 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (state_page &&((GridLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition() == recyclerView.getLayoutManager().getItemCount() -1){
-                    presenter.getData(page, "latest", "all", 18);
+                if (state_page && ((GridLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition() == recyclerView.getLayoutManager().getItemCount() - 1) {
+                    presenter.getData(page, order, totalSearh, orientation, 18);
                     state_page = false;
                 }
 
             }
         });
+        btnSearchPhoto = view.findViewById(R.id.imBtnSearchPhoto);
+        btnSearchPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext(), R.style.DialogStyle);
+                View mView = getLayoutInflater().inflate(R.layout.search_photo, null);
+                Button searchPhoto = mView.findViewById(R.id.searchPhoto);
+                Button cancel = mView.findViewById(R.id.cancelPhoto);
+                final EditText editText = mView.findViewById(R.id.editTextSearh);
+                alertDialog.setView(mView);
+                final AlertDialog dialog = alertDialog.create();
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                dialog.show();
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+                searchPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        page = 1;
+                        totalSearh = editText.getText().toString();
+                        dataHit.clear();
+                        presenter.getData(page, order, totalSearh, orientation, 18);
+                        recyclerViewAdapter.notifyDataSetChanged();
+                        dialog.cancel();
+                    }
+                });
+            }
+        });
+        btnSettingPhoto = view.findViewById(R.id.imBtnSettingPhoto);
+        btnSettingPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext(), R.style.DialogStyle);
+                View mView = getLayoutInflater().inflate(R.layout.setting_photo, null);
+                Button searchPhoto = mView.findViewById(R.id.updatePhoto);
+                Button cancel = mView.findViewById(R.id.cancel);
+                RadioGroup radioPopular = mView.findViewById(R.id.radioPopular);
+                radioPopular.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch (checkedId) {
+                            case R.id.latest:
+                                order = "latest";
+                                break;
+                            case R.id.popular:
+                                order = "popular";
+                                break;
+                        }
+                    }
+                });
+                RadioGroup radioOrientation = mView.findViewById(R.id.radioOrientation);
+                radioOrientation.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch (checkedId) {
+                            case R.id.allphoto:
+                                orientation = "all";
+                                break;
+                            case R.id.verticalPhoto:
+                                orientation = "vertical";
+                                break;
+                            case R.id.horizontalPhoto:
+                                orientation = "horizontal";
+                                break;
+                        }
+                    }
+                });
+                alertDialog.setView(mView);
+                final AlertDialog dialog = alertDialog.create();
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                dialog.show();
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+                searchPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        page = 1;
+                        dataHit.clear();
+                        presenter.getData(page, order, totalSearh, orientation, 18);
+                        recyclerViewAdapter.notifyDataSetChanged();
+                        dialog.cancel();
+                    }
+                });
+            }
+        });
+
         return view;
     }
 
@@ -113,7 +216,7 @@ public class PhotoFragment extends Fragment implements PhotoCallBack.returnView 
         public void run() {
             if (CheskInternet.chekInternet(Objects.requireNonNull(getContext()))) {
                 if (state) {
-                    presenter.getData(page, "latest", "all", 18);
+                    presenter.getData(page, order, totalSearh, orientation, 18);
                     state = false;
                 }
                 getPostHandler.postDelayed(this, 5000);
@@ -148,13 +251,13 @@ public class PhotoFragment extends Fragment implements PhotoCallBack.returnView 
     public void showData(List<Hit> posts) {
         dataHit.addAll(posts);
         recyclerViewAdapter.notifyItemInserted(dataHit.size());
-        Log.i("TAG", "showData: " + page);
     }
 
     @Override
     public void countPage() {
         page = page + 1;
         state_page = true;
-        Log.i("TAG", "countPage: " + state_page);
     }
+
+
 }

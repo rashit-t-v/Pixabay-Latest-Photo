@@ -12,26 +12,39 @@ public class PhotoModel {
     private RetrofitApi retrofit;
     private PhotoCallBack.returnPresenter returnPresenter;
 
-    public  PhotoModel (RetrofitApi retrofitApi){
+    public PhotoModel(RetrofitApi retrofitApi) {
         retrofit = retrofitApi;
     }
-    public void setCallBack (PhotoCallBack.returnPresenter returnPres){
+
+    public void setCallBack(PhotoCallBack.returnPresenter returnPres) {
         returnPresenter = returnPres;
     }
-    public void getDataModel (int page, String order, String orintation, int count_per_page){
-        Call<Post> call = retrofit.getPosts(page, order, orintation, count_per_page);
+
+    public void getDataModel(int page, String order, final String search, String orintation, int count_per_page) {
+        Call<Post> call = retrofit.getPosts(page, order, search, orintation, count_per_page);
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
-                Post posts = response.body();
-                returnPresenter.onSuccses(posts.getHits());
+                if (response.code() == 200){
+                    Post posts = response.body();
+                    returnPresenter.onSuccses(posts.getHits());
+                }
+                else if (response.code() == 429){
+                }
+                else {}
+
 //                for (Hit hit : posts.getHits()) {
 //                    data.add(new DataBase(hit.getId(),hit.getWebformatURL(), hit.getUser(), hit.getTags()));
 //                }
+
             }
+
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
+
+
             }
         });
+
     }
 }

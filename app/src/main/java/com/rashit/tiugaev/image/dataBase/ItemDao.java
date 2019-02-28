@@ -13,7 +13,7 @@ import androidx.room.Query;
 public interface ItemDao {
 
     @Query("SELECT * FROM `favorits`")
-     LiveData<List<DataBase>> getAllNotes();
+     LiveData<List<DataBase>> getAllItems();
 
     @Insert
     void insertItem(DataBase dataBase);

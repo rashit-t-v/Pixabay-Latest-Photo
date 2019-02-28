@@ -72,8 +72,8 @@ public class FavoriteRecAdapter extends RecyclerView.Adapter<FavoriteRecAdapter.
         }
     }
 
-    public void setItems(List<DataBase> notes1) {
-        this.dataBases = notes1;
+    public void setItems(List<DataBase> items) {
+        this.dataBases = items;
     }
 
     public List<DataBase> getItems() {

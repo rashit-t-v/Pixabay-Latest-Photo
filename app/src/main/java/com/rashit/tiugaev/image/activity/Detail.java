@@ -100,7 +100,6 @@ public class Detail extends AppCompatActivity implements DetailCallBack {
         full.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                boolean stateView = true;
                 if (stateView){
                     getSupportActionBar().hide();
                     stateView = false;

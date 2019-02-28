@@ -12,5 +12,6 @@ public interface PhotoCallBack {
     }
     interface returnPresenter{
         void onSuccses(List<Hit> dataBases);
+
     }
 }

@@ -13,6 +13,7 @@ public interface RetrofitApi {
     Call<Post> getPosts(
             @Query("page") int page,
             @Query("order") String order,
+            @Query("q") String search,
             @Query("orientation") String orientation,
             @Query("per_page") int count_per_page
     );

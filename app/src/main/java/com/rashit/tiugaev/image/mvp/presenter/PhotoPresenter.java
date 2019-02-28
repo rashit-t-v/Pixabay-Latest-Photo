@@ -18,8 +18,8 @@ public class PhotoPresenter implements PhotoCallBack.returnPresenter{
 
     }
 
-    public void getData (int page, String order, String orintation, int count_per_page){
-        photoModel.getDataModel(page, order,orintation,count_per_page);
+    public void getData (int page, String order, String search, String orintation, int count_per_page){
+        photoModel.getDataModel(page, order, search, orintation,count_per_page);
     }
 
 
@@ -28,4 +28,6 @@ public class PhotoPresenter implements PhotoCallBack.returnPresenter{
         returnView.showData(dataBases);
         returnView.countPage();
     }
+
+
 }

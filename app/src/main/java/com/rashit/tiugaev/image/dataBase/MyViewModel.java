@@ -1,8 +1,6 @@
 package com.rashit.tiugaev.image.dataBase;
 import android.app.Application;
 import android.os.AsyncTask;
-import com.rashit.tiugaev.image.dataBase.DataBase;
-import com.rashit.tiugaev.image.dataBase.VersionDatabase;
 import com.rashit.tiugaev.image.activity.DetailCallBack;
 
 import java.util.List;
@@ -19,7 +17,7 @@ public class MyViewModel extends AndroidViewModel {
     public MyViewModel(@NonNull Application application) {
         super(application);
         database = VersionDatabase.getInstance(getApplication());
-        items = database.mDao().getAllNotes();
+        items = database.mDao().getAllItems();
     }
 
     public LiveData<List<DataBase>> getItems() {
